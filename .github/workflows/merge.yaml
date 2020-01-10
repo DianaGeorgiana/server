@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - master
+      - develop
+      - feature/*
+  push:
+    branches:
+      - master
+      - develop
+      - feature/*
+
+jobs:
+  phase:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js 12.0.0
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.0.0
+      - name: Yarn install
+        run: yarn install
+      - name: Yarn lint
+        run: yarn lint
+      - name: Yarn format diff
+        run: yarn format:diff
+      - name: Yarn test
+        run: yarn jest --ci
+        env:
+          CI: true
